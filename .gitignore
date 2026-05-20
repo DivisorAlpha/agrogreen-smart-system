@@ -1,0 +1,46 @@
+# ===============================
+# SISTEMA
+# ===============================
+.DS_Store
+Thumbs.db
+
+# ===============================
+# IDE / EDITORES
+# ===============================
+.vscode/
+.idea/
+*.iml
+
+# ===============================
+# JAVA / SPRING BOOT
+# ===============================
+backend/target/
+backend/.settings/
+backend/.classpath
+backend/.project
+
+# ===============================
+# MAVEN
+# ===============================
+*.log
+
+# ===============================
+# NODE / FRONTEND
+# ===============================
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# ===============================
+# VARIABLES Y SECRETOS
+# ===============================
+.env
+*.env
+application-local.properties
+application-dev.properties
+
+# ===============================
+# PRUEBAS / REPORTES
+# ===============================
+tests/reports/
+coverage/
