@@ -2,7 +2,10 @@ package com.agrogreen.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
@@ -16,17 +19,37 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http
-                .csrf(csrf -> csrf.disable())
+        return http
+                // Desactiva CSRF para permitir pruebas con Postman en APIs REST
+                .csrf(AbstractHttpConfigurer::disable)
+
+                // Habilita configuración CORS básica
+                .cors(Customizer.withDefaults())
+
+                // API sin sesiones por ahora
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                // Permisos temporales para desarrollo
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/status",
+                                "/api/status/**",
                                 "/api/greenhouses/**",
-                                "/actuator/health"
+                                "/api/zones/**",
+                                "/api/crops/**",
+                                "/actuator/health",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
                         ).permitAll()
-                        .anyRequest().authenticated()
-                );
+                        .anyRequest().permitAll()
+                )
 
-        return http.build();
+                // Desactivar login por formulario y basic auth en esta fase
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+
+                .build();
     }
 }

@@ -1,0 +1,11 @@
+{
+  "zone": {
+    "id": 1,
+    "greenhouseId": 1,
+    "name": "Zona Norte",
+    "description": "Zona destinada al cultivo de tomate.",
+    "status": "ACTIVE",
+    "createdAt": "2026-05-20T15:30:00",
+    "updatedAt": null
+  }
+}
