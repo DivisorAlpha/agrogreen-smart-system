@@ -6,6 +6,7 @@ import com.agrogreen.readings.service.SensorReadingService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import com.agrogreen.readings.dto.SensorReadingCreatedResponse;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class SensorReadingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SensorReadingResponse create(@Valid @RequestBody SensorReadingRequest request) {
+    public SensorReadingCreatedResponse create(@Valid @RequestBody SensorReadingRequest request) {
         return sensorReadingService.create(request);
     }
 

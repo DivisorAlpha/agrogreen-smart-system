@@ -9,6 +9,9 @@ import com.agrogreen.sensors.repository.SensorRepository;
 import com.agrogreen.shared.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.agrogreen.automation.dto.AutomationEvaluationResponse;
+import com.agrogreen.automation.service.AutomationRuleService;
+import com.agrogreen.readings.dto.SensorReadingCreatedResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,11 +27,17 @@ public class SensorReadingService {
 
     private final SensorReadingRepository sensorReadingRepository;
     private final SensorRepository sensorRepository;
+    private final AutomationRuleService automationRuleService;
 
-    public SensorReadingService(SensorReadingRepository sensorReadingRepository, SensorRepository sensorRepository) {
-        this.sensorReadingRepository = sensorReadingRepository;
-        this.sensorRepository = sensorRepository;
-    }
+    public SensorReadingService(
+        SensorReadingRepository sensorReadingRepository,
+        SensorRepository sensorRepository,
+        AutomationRuleService automationRuleService
+) {
+    this.sensorReadingRepository = sensorReadingRepository;
+    this.sensorRepository = sensorRepository;
+    this.automationRuleService = automationRuleService;
+}
 
     public List<SensorReadingResponse> findAll() {
         return sensorReadingRepository.findAll()
@@ -68,25 +77,30 @@ public class SensorReadingService {
     }
 
     @Transactional
-    public SensorReadingResponse create(SensorReadingRequest request) {
-        Sensor sensor = sensorRepository.findByCode(request.getSensorCode())
-                .orElseThrow(() -> new ResourceNotFoundException("Sensor no encontrado con código: " + request.getSensorCode()));
+public SensorReadingCreatedResponse create(SensorReadingRequest request) {
+    Sensor sensor = sensorRepository.findByCode(request.getSensorCode())
+            .orElseThrow(() -> new ResourceNotFoundException("Sensor no encontrado con código: " + request.getSensorCode()));
 
-        SensorReading reading = new SensorReading();
-        reading.setSensor(sensor);
-        reading.setValue(request.getValue());
-        reading.setReadingDateTime(
-                request.getReadingDateTime() != null ? request.getReadingDateTime() : LocalDateTime.now()
-        );
-        reading.setSource(
-                request.getSource() != null ? request.getSource() : "MANUAL"
-        );
-        reading.setStatus(calculateStatus(sensor, request.getValue()));
+    SensorReading reading = new SensorReading();
+    reading.setSensor(sensor);
+    reading.setValue(request.getValue());
+    reading.setReadingDateTime(
+            request.getReadingDateTime() != null ? request.getReadingDateTime() : LocalDateTime.now()
+    );
+    reading.setSource(
+            request.getSource() != null ? request.getSource() : "MANUAL"
+    );
+    reading.setStatus(calculateStatus(sensor, request.getValue()));
 
-        SensorReading savedReading = sensorReadingRepository.save(reading);
+    SensorReading savedReading = sensorReadingRepository.save(reading);
 
-        return toResponse(savedReading);
-    }
+    AutomationEvaluationResponse automationEvaluation = automationRuleService.evaluateReading(savedReading);
+
+    return new SensorReadingCreatedResponse(
+            toResponse(savedReading),
+            automationEvaluation
+    );
+}
 
     @Transactional
     public SensorReadingResponse update(Long id, SensorReadingRequest request) {

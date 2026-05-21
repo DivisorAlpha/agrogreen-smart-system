@@ -118,46 +118,53 @@ public class AutomationRuleService {
         return toResponse(updatedRule);
     }
 
-    @Transactional
-    public AutomationEvaluationResponse evaluateBySensorCode(String sensorCode) {
-        SensorReading latestReading = sensorReadingRepository.findBySensorCodeOrderByReadingDateTimeDesc(sensorCode)
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("No existen lecturas para el sensor: " + sensorCode));
+   @Transactional
+public AutomationEvaluationResponse evaluateBySensorCode(String sensorCode) {
+    SensorReading latestReading = sensorReadingRepository.findBySensorCodeOrderByReadingDateTimeDesc(sensorCode)
+            .stream()
+            .findFirst()
+            .orElseThrow(() -> new ResourceNotFoundException("No existen lecturas para el sensor: " + sensorCode));
 
-        List<AutomationRule> rules = automationRuleRepository.findActiveBySensorCode(sensorCode);
+    return evaluateReading(latestReading);
+}
 
-        List<String> actions = new ArrayList<>();
-        int triggered = 0;
+@Transactional
+public AutomationEvaluationResponse evaluateReading(SensorReading reading) {
+    String sensorCode = reading.getSensor().getCode();
 
-        for (AutomationRule rule : rules) {
-            boolean conditionMatches = conditionMatches(
-                    latestReading.getValue(),
-                    rule.getOperator(),
-                    rule.getThresholdValue()
-            );
+    List<AutomationRule> rules = automationRuleRepository.findActiveBySensorCode(sensorCode);
 
-            if (conditionMatches) {
-                applyCommand(rule.getActuator(), rule.getCommand());
-                triggered++;
+    List<String> actions = new ArrayList<>();
+    int triggered = 0;
 
-                actions.add(
-                        "Regla '" + rule.getName() + "' ejecutó " +
-                                rule.getCommand() + " sobre " +
-                                rule.getActuator().getCode()
-                );
-            }
-        }
-
-        return new AutomationEvaluationResponse(
-                sensorCode,
-                latestReading.getValue(),
-                latestReading.getReadingDateTime(),
-                rules.size(),
-                triggered,
-                actions
+    for (AutomationRule rule : rules) {
+        boolean conditionMatches = conditionMatches(
+                reading.getValue(),
+                rule.getOperator(),
+                rule.getThresholdValue()
         );
+
+        if (conditionMatches) {
+            applyCommand(rule.getActuator(), rule.getCommand());
+            triggered++;
+
+            actions.add(
+                    "Regla '" + rule.getName() + "' ejecutó " +
+                            rule.getCommand() + " sobre " +
+                            rule.getActuator().getCode()
+            );
+        }
     }
+
+    return new AutomationEvaluationResponse(
+            sensorCode,
+            reading.getValue(),
+            reading.getReadingDateTime(),
+            rules.size(),
+            triggered,
+            actions
+    );
+}
 
     @Transactional
     public void delete(Long id) {

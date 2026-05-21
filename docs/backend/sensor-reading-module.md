@@ -32,3 +32,20 @@ Sensor 1 ---- N SensorReading
   "readingDateTime": "2026-05-20T18:45:00",
   "source": "MANUAL"
 } 
+
+## Evaluación automática de reglas
+
+Al crear una lectura mediante:
+
+POST /api/sensor-readings
+
+el sistema evalúa automáticamente las reglas activas asociadas al sensor. Si una condición se cumple, se ejecuta el comando configurado sobre el actuador correspondiente.
+
+Ejemplo:
+
+```json
+{
+  "sensorCode": "TEMP-001",
+  "value": 32.5,
+  "source": "MANUAL"
+}
