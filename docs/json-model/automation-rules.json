@@ -1,0 +1,16 @@
+{
+  "automationRule": {
+    "id": 1,
+    "name": "Encender ventilador por temperatura alta",
+    "sensorCode": "TEMP-001",
+    "sensorName": "Sensor de temperatura zona norte",
+    "operator": ">",
+    "thresholdValue": 30.0,
+    "actuatorCode": "FAN-001",
+    "actuatorName": "Ventilador zona norte",
+    "command": "TURN_ON",
+    "status": "ACTIVE",
+    "createdAt": "2026-05-20T20:30:00",
+    "updatedAt": null
+  }
+}

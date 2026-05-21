@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 "/api/sensors/**",
                                 "/api/sensor-readings/**",
                                 "/api/actuators/**",
+                                "/api/automation-rules/**",
                                 "/actuator/health",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
