@@ -1,0 +1,15 @@
+{
+  "alert": {
+    "id": 1,
+    "sensorCode": "TEMP-001",
+    "sensorName": "Sensor de temperatura zona norte",
+    "zoneId": 1,
+    "zoneName": "Zona Norte",
+    "type": "TEMPERATURE",
+    "level": "WARNING",
+    "message": "La lectura 80.0 °C está fuera del rango permitido para el sensor TEMP-001.",
+    "status": "OPEN",
+    "createdAt": "2026-05-20T21:30:00",
+    "resolvedAt": null
+  }
+}

@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.agrogreen.automation.dto.AutomationEvaluationResponse;
 import com.agrogreen.automation.service.AutomationRuleService;
 import com.agrogreen.readings.dto.SensorReadingCreatedResponse;
+import com.agrogreen.alerts.dto.AlertResponse;
+import com.agrogreen.alerts.service.AlertService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,15 +30,18 @@ public class SensorReadingService {
     private final SensorReadingRepository sensorReadingRepository;
     private final SensorRepository sensorRepository;
     private final AutomationRuleService automationRuleService;
+    private final AlertService alertService;
 
     public SensorReadingService(
         SensorReadingRepository sensorReadingRepository,
         SensorRepository sensorRepository,
-        AutomationRuleService automationRuleService
+        AutomationRuleService automationRuleService,
+        AlertService alertService
 ) {
     this.sensorReadingRepository = sensorReadingRepository;
     this.sensorRepository = sensorRepository;
     this.automationRuleService = automationRuleService;
+    this.alertService = alertService;
 }
 
     public List<SensorReadingResponse> findAll() {
@@ -95,10 +100,12 @@ public SensorReadingCreatedResponse create(SensorReadingRequest request) {
     SensorReading savedReading = sensorReadingRepository.save(reading);
 
     AutomationEvaluationResponse automationEvaluation = automationRuleService.evaluateReading(savedReading);
+    AlertResponse alert = alertService.createFromSensorReading(savedReading);
 
     return new SensorReadingCreatedResponse(
             toResponse(savedReading),
-            automationEvaluation
+            automationEvaluation,
+            alert
     );
 }
 
