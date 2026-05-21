@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-05-21T10:00:00",
+  "totalGreenhouses": 1,
+  "totalZones": 2,
+  "totalCrops": 3,
+  "totalSensors": 4,
+  "activeSensors": 4,
+  "totalActuators": 2,
+  "actuatorsOn": 1,
+  "totalAutomationRules": 2,
+  "activeAutomationRules": 2,
+  "openAlerts": 1,
+  "latestReadings": [
+    {
+      "id": 1,
+      "sensorCode": "TEMP-001",
+      "sensorName": "Sensor de temperatura zona norte",
+      "zoneName": "Zona Norte",
+      "type": "TEMPERATURE",
+      "value": 32.5,
+      "unit": "°C",
+      "status": "VALID",
+      "readingDateTime": "2026-05-21T09:55:00"
+    }
+  ],
+  "latestAlerts": [
+    {
+      "id": 1,
+      "sensorCode": "TEMP-001",
+      "sensorName": "Sensor de temperatura zona norte",
+      "zoneName": "Zona Norte",
+      "type": "TEMPERATURE",
+      "level": "WARNING",
+      "message": "La lectura 80.0 °C está fuera del rango permitido para el sensor TEMP-001.",
+      "status": "OPEN",
+      "createdAt": "2026-05-21T09:58:00"
+    }
+  ]
+}

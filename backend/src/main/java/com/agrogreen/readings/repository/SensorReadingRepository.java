@@ -16,6 +16,8 @@ public interface SensorReadingRepository extends JpaRepository<SensorReading, Lo
 
     List<SensorReading> findBySensorIdOrderByReadingDateTimeDesc(Long sensorId);
 
+    List<SensorReading> findTop5ByOrderByReadingDateTimeDesc();
+
     @Query("SELECT r FROM SensorReading r JOIN r.sensor s WHERE s.code = :sensorCode ORDER BY r.readingDateTime DESC")
     List<SensorReading> findBySensorCodeOrderByReadingDateTimeDesc(@Param("sensorCode") String sensorCode);
 }
