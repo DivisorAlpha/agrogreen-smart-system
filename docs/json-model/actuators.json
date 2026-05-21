@@ -1,0 +1,15 @@
+{
+  "actuator": {
+    "id": 1,
+    "zoneId": 1,
+    "zoneName": "Zona Norte",
+    "code": "FAN-001",
+    "name": "Ventilador zona norte",
+    "type": "FAN",
+    "state": "OFF",
+    "operationalStatus": "ACTIVE",
+    "lastCommandAt": null,
+    "createdAt": "2026-05-20T19:30:00",
+    "updatedAt": null
+  }
+}
