@@ -39,6 +39,8 @@ public class SecurityConfig {
                                 "/api/greenhouses/**",
                                 "/api/zones/**",
                                 "/api/crops/**",
+                                "/api/sensors/**",
+                                "/api/sensor-readings/**",
                                 "/actuator/health",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"

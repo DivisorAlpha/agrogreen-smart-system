@@ -1,0 +1,16 @@
+{
+  "sensor": {
+    "id": 1,
+    "zoneId": 1,
+    "zoneName": "Zona Norte",
+    "code": "TEMP-001",
+    "name": "Sensor de temperatura zona norte",
+    "type": "TEMPERATURE",
+    "unit": "°C",
+    "minValue": 0.0,
+    "maxValue": 60.0,
+    "status": "ACTIVE",
+    "createdAt": "2026-05-20T18:30:00",
+    "updatedAt": null
+  }
+}

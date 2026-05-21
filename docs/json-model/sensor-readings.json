@@ -1,0 +1,17 @@
+{
+  "sensorReading": {
+    "id": 1,
+    "sensorId": 1,
+    "sensorCode": "TEMP-001",
+    "sensorName": "Sensor de temperatura zona norte",
+    "zoneId": 1,
+    "zoneName": "Zona Norte",
+    "type": "TEMPERATURE",
+    "unit": "°C",
+    "value": 28.5,
+    "readingDateTime": "2026-05-20T18:45:00",
+    "source": "MANUAL",
+    "status": "VALID",
+    "createdAt": "2026-05-20T18:45:10"
+  }
+}
