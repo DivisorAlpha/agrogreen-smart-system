@@ -7,6 +7,7 @@ import {
   Sprout,
   Thermometer,
   Warehouse,
+  Workflow,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -59,6 +60,11 @@ export default function AppLayout({ children }) {
           <NavLink to="/sensor-readings" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
             <Activity size={18} />
             Lecturas
+          </NavLink>
+
+          <NavLink to="/automation-rules" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+            <Workflow size={18} />
+            Reglas
           </NavLink>
         </nav>
       </aside>

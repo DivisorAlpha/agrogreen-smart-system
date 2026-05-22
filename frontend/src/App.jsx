@@ -7,6 +7,7 @@ import CropsPage from "./pages/CropsPage";
 import SensorsPage from "./pages/SensorsPage";
 import ActuatorsPage from "./pages/ActuatorsPage";
 import SensorReadingsPage from "./pages/SensorReadingsPage";
+import AutomationRulesPage from "./pages/AutomationRulesPage";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/sensors" element={<SensorsPage />} />
           <Route path="/actuators" element={<ActuatorsPage />} />
           <Route path="/sensor-readings" element={<SensorReadingsPage />} />
+          <Route path="/automation-rules" element={<AutomationRulesPage />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>

@@ -140,4 +140,29 @@ export const deleteSensorReading = async (id) => {
   await api.delete(`/sensor-readings/${id}`);
 };
 
+// Automation Rules
+export const getAutomationRules = async () => {
+  const response = await api.get("/automation-rules");
+  return response.data;
+};
+
+export const createAutomationRule = async (rule) => {
+  const response = await api.post("/automation-rules", rule);
+  return response.data;
+};
+
+export const updateAutomationRule = async (id, rule) => {
+  const response = await api.put(`/automation-rules/${id}`, rule);
+  return response.data;
+};
+
+export const deleteAutomationRule = async (id) => {
+  await api.delete(`/automation-rules/${id}`);
+};
+
+export const evaluateAutomationRules = async (sensorCode) => {
+  const response = await api.post(`/automation-rules/evaluate/${sensorCode}`);
+  return response.data;
+};
+
 export default api;
