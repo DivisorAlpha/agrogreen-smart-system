@@ -1,6 +1,7 @@
 import {
   Activity,
   AlertTriangle,
+  BarChart3,
   Fan,
   Layers,
   Leaf,
@@ -37,6 +38,11 @@ export default function AppLayout({ children }) {
           <NavLink to="/monitoring" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
             <Monitor size={18} />
             Monitoreo
+          </NavLink>
+
+          <NavLink to="/charts" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+            <BarChart3 size={18} />
+            Gráficas
           </NavLink>
 
           <NavLink to="/greenhouses" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>

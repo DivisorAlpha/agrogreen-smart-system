@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AppLayout from "./components/layout/AppLayout";
 import DashboardPage from "./pages/DashboardPage";
+import MonitoringPage from "./pages/MonitoringPage";
+import ChartsPage from "./pages/ChartsPage";
 import GreenhousesPage from "./pages/GreenhousesPage";
 import ZonesPage from "./pages/ZonesPage";
 import CropsPage from "./pages/CropsPage";
@@ -9,7 +11,6 @@ import ActuatorsPage from "./pages/ActuatorsPage";
 import SensorReadingsPage from "./pages/SensorReadingsPage";
 import AutomationRulesPage from "./pages/AutomationRulesPage";
 import AlertsPage from "./pages/AlertsPage";
-import MonitoringPage from "./pages/MonitoringPage";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/monitoring" element={<MonitoringPage />} />
+          <Route path="/charts" element={<ChartsPage />} />
           <Route path="/greenhouses" element={<GreenhousesPage />} />
           <Route path="/zones" element={<ZonesPage />} />
           <Route path="/crops" element={<CropsPage />} />

@@ -126,6 +126,11 @@ export const getSensorReadings = async () => {
   return response.data;
 };
 
+export const getSensorReadingsBySensorCode = async (sensorCode) => {
+  const response = await api.get(`/sensor-readings/sensor-code/${sensorCode}`);
+  return response.data;
+};
+
 export const createSensorReading = async (reading) => {
   const response = await api.post("/sensor-readings", reading);
   return response.data;
