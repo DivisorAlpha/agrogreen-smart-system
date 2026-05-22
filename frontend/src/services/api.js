@@ -92,4 +92,32 @@ export const deleteSensor = async (id) => {
   await api.delete(`/sensors/${id}`);
 };
 
+// Actuators
+export const getActuators = async () => {
+  const response = await api.get("/actuators");
+  return response.data;
+};
+
+export const createActuator = async (actuator) => {
+  const response = await api.post("/actuators", actuator);
+  return response.data;
+};
+
+export const updateActuator = async (id, actuator) => {
+  const response = await api.put(`/actuators/${id}`, actuator);
+  return response.data;
+};
+
+export const deleteActuator = async (id) => {
+  await api.delete(`/actuators/${id}`);
+};
+
+export const executeActuatorCommand = async (code, command) => {
+  const response = await api.patch(`/actuators/code/${code}/command`, {
+    command,
+  });
+
+  return response.data;
+};
+
 export default api;

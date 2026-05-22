@@ -5,6 +5,7 @@ import GreenhousesPage from "./pages/GreenhousesPage";
 import ZonesPage from "./pages/ZonesPage";
 import CropsPage from "./pages/CropsPage";
 import SensorsPage from "./pages/SensorsPage";
+import ActuatorsPage from "./pages/ActuatorsPage";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/zones" element={<ZonesPage />} />
           <Route path="/crops" element={<CropsPage />} />
           <Route path="/sensors" element={<SensorsPage />} />
+          <Route path="/actuators" element={<ActuatorsPage />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>

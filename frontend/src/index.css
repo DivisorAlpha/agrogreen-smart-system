@@ -450,3 +450,16 @@ td span {
     position: static;
   }
 }
+
+.badge.neutral {
+  background: rgba(148, 163, 184, 0.18);
+  color: #cbd5e1;
+}
+
+.secondary-small-button {
+  padding: 0.55rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: #d1fae5;
+}

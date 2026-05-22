@@ -1,4 +1,5 @@
 import {
+  Fan,
   Layers,
   Leaf,
   LayoutDashboard,
@@ -73,6 +74,16 @@ export default function AppLayout({ children }) {
           >
             <Thermometer size={18} />
             Sensores
+          </NavLink>
+
+          <NavLink
+            to="/actuators"
+            className={({ isActive }) =>
+              isActive ? "nav-item active" : "nav-item"
+            }
+          >
+            <Fan size={18} />
+            Actuadores
           </NavLink>
         </nav>
       </aside>
