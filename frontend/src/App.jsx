@@ -9,6 +9,7 @@ import ActuatorsPage from "./pages/ActuatorsPage";
 import SensorReadingsPage from "./pages/SensorReadingsPage";
 import AutomationRulesPage from "./pages/AutomationRulesPage";
 import AlertsPage from "./pages/AlertsPage";
+import MonitoringPage from "./pages/MonitoringPage";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
       <AppLayout>
         <Routes>
           <Route path="/" element={<DashboardPage />} />
+          <Route path="/monitoring" element={<MonitoringPage />} />
           <Route path="/greenhouses" element={<GreenhousesPage />} />
           <Route path="/zones" element={<ZonesPage />} />
           <Route path="/crops" element={<CropsPage />} />

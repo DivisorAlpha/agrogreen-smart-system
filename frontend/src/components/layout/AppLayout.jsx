@@ -5,6 +5,7 @@ import {
   Layers,
   Leaf,
   LayoutDashboard,
+  Monitor,
   Sprout,
   Thermometer,
   Warehouse,
@@ -31,6 +32,11 @@ export default function AppLayout({ children }) {
           <NavLink to="/" end className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
             <LayoutDashboard size={18} />
             Panel
+          </NavLink>
+
+          <NavLink to="/monitoring" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+            <Monitor size={18} />
+            Monitoreo
           </NavLink>
 
           <NavLink to="/greenhouses" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
