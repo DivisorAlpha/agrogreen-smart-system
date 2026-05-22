@@ -1,4 +1,5 @@
 import {
+  Activity,
   Fan,
   Layers,
   Leaf,
@@ -25,65 +26,39 @@ export default function AppLayout({ children }) {
         </div>
 
         <nav className="sidebar-nav">
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) =>
-              isActive ? "nav-item active" : "nav-item"
-            }
-          >
+          <NavLink to="/" end className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
             <LayoutDashboard size={18} />
             Panel
           </NavLink>
 
-          <NavLink
-            to="/greenhouses"
-            className={({ isActive }) =>
-              isActive ? "nav-item active" : "nav-item"
-            }
-          >
+          <NavLink to="/greenhouses" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
             <Warehouse size={18} />
             Invernaderos
           </NavLink>
 
-          <NavLink
-            to="/zones"
-            className={({ isActive }) =>
-              isActive ? "nav-item active" : "nav-item"
-            }
-          >
+          <NavLink to="/zones" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
             <Layers size={18} />
             Zonas
           </NavLink>
 
-          <NavLink
-            to="/crops"
-            className={({ isActive }) =>
-              isActive ? "nav-item active" : "nav-item"
-            }
-          >
+          <NavLink to="/crops" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
             <Sprout size={18} />
             Cultivos
           </NavLink>
 
-          <NavLink
-            to="/sensors"
-            className={({ isActive }) =>
-              isActive ? "nav-item active" : "nav-item"
-            }
-          >
+          <NavLink to="/sensors" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
             <Thermometer size={18} />
             Sensores
           </NavLink>
 
-          <NavLink
-            to="/actuators"
-            className={({ isActive }) =>
-              isActive ? "nav-item active" : "nav-item"
-            }
-          >
+          <NavLink to="/actuators" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
             <Fan size={18} />
             Actuadores
+          </NavLink>
+
+          <NavLink to="/sensor-readings" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+            <Activity size={18} />
+            Lecturas
           </NavLink>
         </nav>
       </aside>

@@ -463,3 +463,34 @@ td span {
   background: rgba(255, 255, 255, 0.12);
   color: #d1fae5;
 }
+
+.result-box {
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  border-radius: 18px;
+  padding: 1rem;
+  background: rgba(34, 197, 94, 0.1);
+  color: #d1fae5;
+}
+
+.result-box h3 {
+  margin: 0 0 0.7rem;
+  color: #86efac;
+}
+
+.result-box p {
+  margin: 0.35rem 0;
+}
+
+.result-box ul {
+  margin: 0.7rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.warning-box {
+  border-color: rgba(245, 158, 11, 0.32);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.warning-box h3 {
+  color: #facc15;
+}

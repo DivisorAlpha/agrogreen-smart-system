@@ -120,4 +120,24 @@ export const executeActuatorCommand = async (code, command) => {
   return response.data;
 };
 
+// Sensor Readings
+export const getSensorReadings = async () => {
+  const response = await api.get("/sensor-readings");
+  return response.data;
+};
+
+export const createSensorReading = async (reading) => {
+  const response = await api.post("/sensor-readings", reading);
+  return response.data;
+};
+
+export const updateSensorReading = async (id, reading) => {
+  const response = await api.put(`/sensor-readings/${id}`, reading);
+  return response.data;
+};
+
+export const deleteSensorReading = async (id) => {
+  await api.delete(`/sensor-readings/${id}`);
+};
+
 export default api;
