@@ -1,5 +1,6 @@
 import {
   Activity,
+  AlertTriangle,
   Fan,
   Layers,
   Leaf,
@@ -65,6 +66,11 @@ export default function AppLayout({ children }) {
           <NavLink to="/automation-rules" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
             <Workflow size={18} />
             Reglas
+          </NavLink>
+
+          <NavLink to="/alerts" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+            <AlertTriangle size={18} />
+            Alertas
           </NavLink>
         </nav>
       </aside>

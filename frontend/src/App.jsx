@@ -8,6 +8,7 @@ import SensorsPage from "./pages/SensorsPage";
 import ActuatorsPage from "./pages/ActuatorsPage";
 import SensorReadingsPage from "./pages/SensorReadingsPage";
 import AutomationRulesPage from "./pages/AutomationRulesPage";
+import AlertsPage from "./pages/AlertsPage";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/actuators" element={<ActuatorsPage />} />
           <Route path="/sensor-readings" element={<SensorReadingsPage />} />
           <Route path="/automation-rules" element={<AutomationRulesPage />} />
+          <Route path="/alerts" element={<AlertsPage />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>

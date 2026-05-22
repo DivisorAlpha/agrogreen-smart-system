@@ -165,4 +165,29 @@ export const evaluateAutomationRules = async (sensorCode) => {
   return response.data;
 };
 
+// Alerts
+export const getAlerts = async () => {
+  const response = await api.get("/alerts");
+  return response.data;
+};
+
+export const getAlertsByStatus = async (status) => {
+  const response = await api.get(`/alerts/status/${status}`);
+  return response.data;
+};
+
+export const getAlertsBySensorCode = async (sensorCode) => {
+  const response = await api.get(`/alerts/sensor/${sensorCode}`);
+  return response.data;
+};
+
+export const resolveAlert = async (id) => {
+  const response = await api.patch(`/alerts/${id}/resolve`);
+  return response.data;
+};
+
+export const deleteAlert = async (id) => {
+  await api.delete(`/alerts/${id}`);
+};
+
 export default api;
