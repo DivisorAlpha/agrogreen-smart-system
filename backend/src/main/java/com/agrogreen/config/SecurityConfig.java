@@ -55,6 +55,7 @@ public class SecurityConfig {
                 // Desactivar login por formulario y basic auth en esta fase
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
 
                 .build();
     }
