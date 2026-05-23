@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AdminOnly, PermissionNotice } from "../components/auth/RoleGuard";
 import {
   createAutomationRule,
   deleteAutomationRule,
@@ -216,6 +217,14 @@ export default function AutomationRulesPage() {
       </header>
 
       <section className="module-grid">
+        <AdminOnly
+  fallback={
+    <PermissionNotice
+      title="Reglas en modo consulta"
+      message="Puedes consultar y evaluar reglas, pero solo un administrador puede crear, editar o eliminar reglas de automatización."
+    />
+  }
+>
         <article className="panel form-panel">
           <div className="panel-header">
             <h2>{editingId ? "Editar regla" : "Nueva regla"}</h2>
@@ -363,6 +372,7 @@ export default function AutomationRulesPage() {
             </div>
           </form>
         </article>
+        </AdminOnly>
 
         <section className="panel">
           <div className="panel-header">
@@ -437,23 +447,25 @@ export default function AutomationRulesPage() {
                       </td>
 
                       <td>
-                        <div className="table-actions">
-                          <button
-                            type="button"
-                            className="small-button"
-                            onClick={() => handleEdit(rule)}
-                          >
-                            Editar
-                          </button>
+                        <AdminOnly fallback={<span className="read-only-label">Solo evaluación</span>}>
+                          <div className="table-actions">
+                            <button
+                              type="button"
+                              className="small-button"
+                              onClick={() => handleEdit(rule)}
+                            >
+                              Editar
+                            </button>
 
-                          <button
-                            type="button"
-                            className="danger-button"
-                            onClick={() => handleDelete(rule.id)}
-                          >
-                            Eliminar
-                          </button>
-                        </div>
+                            <button
+                              type="button"
+                              className="danger-button"
+                              onClick={() => handleDelete(rule.id)}
+                            >
+                              Eliminar
+                            </button>
+                          </div>
+                        </AdminOnly>
                       </td>
                     </tr>
                   ))

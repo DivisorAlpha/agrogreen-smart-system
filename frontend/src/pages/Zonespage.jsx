@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AdminOnly, PermissionNotice } from "../components/auth/RoleGuard";
 import {
   createZone,
   deleteZone,
@@ -152,6 +153,14 @@ export default function ZonesPage() {
       </header>
 
       <section className="module-grid">
+        <AdminOnly
+          fallback={
+            <PermissionNotice
+              title="Solo consulta"
+              message="Tu rol permite consultar esta información, pero solo un administrador puede crear o modificar registros."
+            />
+          }
+        >
         <article className="panel form-panel">
           <div className="panel-header">
             <h2>{editingId ? "Editar zona" : "Nueva zona"}</h2>
@@ -226,6 +235,7 @@ export default function ZonesPage() {
             </div>
           </form>
         </article>
+        </AdminOnly>
 
         <section className="panel">
           <div className="panel-header">
@@ -275,23 +285,25 @@ export default function ZonesPage() {
                       <td>{formatDate(zone.createdAt)}</td>
 
                       <td>
-                        <div className="table-actions">
-                          <button
-                            type="button"
-                            className="small-button"
-                            onClick={() => handleEdit(zone)}
-                          >
-                            Editar
-                          </button>
+                        <AdminOnly fallback={<span className="read-only-label">Solo lectura</span>}>
+                          <div className="table-actions">
+                            <button
+                              type="button"
+                              className="small-button"
+                              onClick={() => handleEdit(zone)}
+                            >
+                              Editar
+                            </button>
 
-                          <button
-                            type="button"
-                            className="danger-button"
-                            onClick={() => handleDelete(zone.id)}
-                          >
-                            Eliminar
-                          </button>
-                        </div>
+                            <button
+                              type="button"
+                              className="danger-button"
+                              onClick={() => handleDelete(zone.id)}
+                            >
+                              Eliminar
+                            </button>
+                          </div>
+                        </AdminOnly>
                       </td>
                     </tr>
                   ))

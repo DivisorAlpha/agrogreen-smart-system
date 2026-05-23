@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AdminOnly, PermissionNotice } from "../components/auth/RoleGuard";
 import {
   createActuator,
   deleteActuator,
@@ -207,6 +208,14 @@ export default function ActuatorsPage() {
       </header>
 
       <section className="module-grid">
+        <AdminOnly
+  fallback={
+    <PermissionNotice
+      title="Control operativo disponible"
+      message="Puedes consultar actuadores y ejecutar comandos, pero solo un administrador puede crear o modificar dispositivos."
+    />
+  }
+>
         <article className="panel form-panel">
           <div className="panel-header">
             <h2>{editingId ? "Editar actuador" : "Nuevo actuador"}</h2>
@@ -314,6 +323,7 @@ export default function ActuatorsPage() {
             </div>
           </form>
         </article>
+        </AdminOnly>
 
         <section className="panel">
           <div className="panel-header">
@@ -419,23 +429,25 @@ export default function ActuatorsPage() {
                       </td>
 
                       <td>
-                        <div className="table-actions">
-                          <button
-                            type="button"
-                            className="small-button"
-                            onClick={() => handleEdit(actuator)}
-                          >
-                            Editar
-                          </button>
+                        <AdminOnly fallback={<span className="read-only-label">Solo comandos</span>}>
+  <div className="table-actions">
+    <button
+      type="button"
+      className="small-button"
+      onClick={() => handleEdit(actuator)}
+    >
+      Editar
+    </button>
 
-                          <button
-                            type="button"
-                            className="danger-button"
-                            onClick={() => handleDelete(actuator.id)}
-                          >
-                            Eliminar
-                          </button>
-                        </div>
+    <button
+      type="button"
+      className="danger-button"
+      onClick={() => handleDelete(actuator.id)}
+    >
+      Eliminar
+    </button>
+  </div>
+</AdminOnly>
                       </td>
                     </tr>
                   ))

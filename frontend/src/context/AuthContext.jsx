@@ -13,6 +13,14 @@ export function AuthProvider({ children }) {
   const [authData, setAuthData] = useState(() => getStoredAuthData());
 
   const isAuthenticated = Boolean(authData?.token);
+  const isAdmin = authData?.role === "ADMIN";
+  const isOperator = authData?.role === "OPERATOR";
+
+  const hasRole = (role) => authData?.role === role;
+
+  const hasAnyRole = (roles) => {
+    return roles.includes(authData?.role);
+    };
 
   const user = authData
     ? {
@@ -43,16 +51,20 @@ export function AuthProvider({ children }) {
   };
 
   const value = useMemo(
-    () => ({
-      authData,
-      user,
-      isAuthenticated,
-      login,
-      register,
-      logout,
-    }),
-    [authData, isAuthenticated]
-  );
+  () => ({
+    authData,
+    user,
+    isAuthenticated,
+    isAdmin,
+    isOperator,
+    hasRole,
+    hasAnyRole,
+    login,
+    register,
+    logout,
+  }),
+  [authData, isAuthenticated, isAdmin, isOperator]
+);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

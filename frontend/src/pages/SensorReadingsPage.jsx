@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AdminOnly } from "../components/auth/RoleGuard";
 import {
   createSensorReading,
   deleteSensorReading,
@@ -304,13 +305,15 @@ export default function SensorReadingsPage() {
 
                       <td>
                         <div className="table-actions">
-                          <button
-                            type="button"
-                            className="danger-button"
-                            onClick={() => handleDelete(reading.id)}
-                          >
-                            Eliminar
-                          </button>
+                          <AdminOnly fallback={<span className="read-only-label">Sin eliminación</span>}>
+                            <button
+                              type="button"
+                              className="danger-button"
+                              onClick={() => handleDelete(reading.id)}
+                            >
+                              Eliminar
+                            </button>
+                          </AdminOnly>
                         </div>
                       </td>
                     </tr>

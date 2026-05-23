@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AdminOnly, PermissionNotice } from "../components/auth/RoleGuard";
 import {
   createCrop,
   deleteCrop,
@@ -155,6 +156,14 @@ export default function CropsPage() {
       </header>
 
       <section className="module-grid">
+        <AdminOnly
+  fallback={
+    <PermissionNotice
+      title="Solo consulta"
+      message="Tu rol permite consultar esta información, pero solo un administrador puede crear o modificar registros."
+    />
+  }
+>
         <article className="panel form-panel">
           <div className="panel-header">
             <h2>{editingId ? "Editar cultivo" : "Nuevo cultivo"}</h2>
@@ -249,6 +258,7 @@ export default function CropsPage() {
             </div>
           </form>
         </article>
+        </AdminOnly>
 
         <section className="panel">
           <div className="panel-header">
@@ -301,23 +311,25 @@ export default function CropsPage() {
                       </td>
 
                       <td>
-                        <div className="table-actions">
-                          <button
-                            type="button"
-                            className="small-button"
-                            onClick={() => handleEdit(crop)}
-                          >
-                            Editar
-                          </button>
+                        <AdminOnly fallback={<span className="read-only-label">Solo lectura</span>}>
+  <div className="table-actions">
+    <button
+      type="button"
+      className="small-button"
+      onClick={() => handleEdit(crop)}
+    >
+      Editar
+    </button>
 
-                          <button
-                            type="button"
-                            className="danger-button"
-                            onClick={() => handleDelete(crop.id)}
-                          >
-                            Eliminar
-                          </button>
-                        </div>
+    <button
+      type="button"
+      className="danger-button"
+      onClick={() => handleDelete(crop.id)}
+    >
+      Eliminar
+    </button>
+  </div>
+</AdminOnly>
                       </td>
                     </tr>
                   ))

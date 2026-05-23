@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AdminOnly } from "../components/auth/RoleGuard";
 import {
   deleteAlert,
   getAlerts,
@@ -318,13 +319,15 @@ export default function AlertsPage() {
                           </button>
                         )}
 
-                        <button
-                          type="button"
-                          className="danger-button"
-                          onClick={() => handleDelete(alert.id)}
-                        >
-                          Eliminar
-                        </button>
+                        <AdminOnly>
+                          <button
+                            type="button"
+                            className="danger-button"
+                            onClick={() => handleDelete(alert.id)}
+                          >
+                            Eliminar
+                          </button>
+                        </AdminOnly>
                       </div>
                     </td>
                   </tr>
