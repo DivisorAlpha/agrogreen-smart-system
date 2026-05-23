@@ -1,4 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+
 import AppLayout from "./components/layout/AppLayout";
 import DashboardPage from "./pages/DashboardPage";
 import MonitoringPage from "./pages/MonitoringPage";
@@ -11,25 +14,125 @@ import ActuatorsPage from "./pages/ActuatorsPage";
 import SensorReadingsPage from "./pages/SensorReadingsPage";
 import AutomationRulesPage from "./pages/AutomationRulesPage";
 import AlertsPage from "./pages/AlertsPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+
+function ProtectedApp({ children }) {
+  return (
+    <ProtectedRoute>
+      <AppLayout>{children}</AppLayout>
+    </ProtectedRoute>
+  );
+}
 
 export default function App() {
   return (
     <BrowserRouter>
-      <AppLayout>
+      <AuthProvider>
         <Routes>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/monitoring" element={<MonitoringPage />} />
-          <Route path="/charts" element={<ChartsPage />} />
-          <Route path="/greenhouses" element={<GreenhousesPage />} />
-          <Route path="/zones" element={<ZonesPage />} />
-          <Route path="/crops" element={<CropsPage />} />
-          <Route path="/sensors" element={<SensorsPage />} />
-          <Route path="/actuators" element={<ActuatorsPage />} />
-          <Route path="/sensor-readings" element={<SensorReadingsPage />} />
-          <Route path="/automation-rules" element={<AutomationRulesPage />} />
-          <Route path="/alerts" element={<AlertsPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+
+          <Route
+            path="/"
+            element={
+              <ProtectedApp>
+                <DashboardPage />
+              </ProtectedApp>
+            }
+          />
+
+          <Route
+            path="/monitoring"
+            element={
+              <ProtectedApp>
+                <MonitoringPage />
+              </ProtectedApp>
+            }
+          />
+
+          <Route
+            path="/charts"
+            element={
+              <ProtectedApp>
+                <ChartsPage />
+              </ProtectedApp>
+            }
+          />
+
+          <Route
+            path="/greenhouses"
+            element={
+              <ProtectedApp>
+                <GreenhousesPage />
+              </ProtectedApp>
+            }
+          />
+
+          <Route
+            path="/zones"
+            element={
+              <ProtectedApp>
+                <ZonesPage />
+              </ProtectedApp>
+            }
+          />
+
+          <Route
+            path="/crops"
+            element={
+              <ProtectedApp>
+                <CropsPage />
+              </ProtectedApp>
+            }
+          />
+
+          <Route
+            path="/sensors"
+            element={
+              <ProtectedApp>
+                <SensorsPage />
+              </ProtectedApp>
+            }
+          />
+
+          <Route
+            path="/actuators"
+            element={
+              <ProtectedApp>
+                <ActuatorsPage />
+              </ProtectedApp>
+            }
+          />
+
+          <Route
+            path="/sensor-readings"
+            element={
+              <ProtectedApp>
+                <SensorReadingsPage />
+              </ProtectedApp>
+            }
+          />
+
+          <Route
+            path="/automation-rules"
+            element={
+              <ProtectedApp>
+                <AutomationRulesPage />
+              </ProtectedApp>
+            }
+          />
+
+          <Route
+            path="/alerts"
+            element={
+              <ProtectedApp>
+                <AlertsPage />
+              </ProtectedApp>
+            }
+          />
         </Routes>
-      </AppLayout>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

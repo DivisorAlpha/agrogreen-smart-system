@@ -7,6 +7,56 @@ const api = axios.create({
   },
 });
 
+export const AUTH_STORAGE_KEY = "agrogreen_auth";
+
+export const getStoredAuthData = () => {
+  const rawData = localStorage.getItem(AUTH_STORAGE_KEY);
+
+  if (!rawData) return null;
+
+  try {
+    return JSON.parse(rawData);
+  } catch (error) {
+    console.error("Invalid auth data", error);
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+    return null;
+  }
+};
+
+export const getStoredToken = () => {
+  const authData = getStoredAuthData();
+  return authData?.token || null;
+};
+
+export const setStoredAuthData = (authData) => {
+  localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authData));
+};
+
+export const clearStoredAuthData = () => {
+  localStorage.removeItem(AUTH_STORAGE_KEY);
+};
+
+api.interceptors.request.use((config) => {
+  const token = getStoredToken();
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+// Auth
+export const loginUser = async (credentials) => {
+  const response = await api.post("/auth/login", credentials);
+  return response.data;
+};
+
+export const registerUser = async (userData) => {
+  const response = await api.post("/auth/register", userData);
+  return response.data;
+};
+
 export const getDashboardSummary = async () => {
   const response = await api.get("/dashboard/summary");
   return response.data;
