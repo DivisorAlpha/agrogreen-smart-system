@@ -46,6 +46,24 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error.response?.status;
+    const currentPath = window.location.pathname;
+
+    const isAuthPage =
+      currentPath === "/login" || currentPath === "/register";
+
+    if (status === 401 && !isAuthPage) {
+      clearStoredAuthData();
+      window.location.href = "/login?session=expired";
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 // Auth
 export const loginUser = async (credentials) => {
   const response = await api.post("/auth/login", credentials);

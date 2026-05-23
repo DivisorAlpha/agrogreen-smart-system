@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Leaf, Lock, Mail } from "lucide-react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const initialForm = {
@@ -15,6 +15,8 @@ export default function LoginPage() {
 
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const sessionExpired = searchParams.get("session") === "expired";
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
@@ -107,7 +109,15 @@ export default function LoginPage() {
             </div>
           </label>
 
-          {errorMessage && <p className="form-message error">{errorMessage}</p>}
+          {sessionExpired && !errorMessage && (
+            <p className="form-message error">
+                Tu sesión expiró o el token no es válido. Inicia sesión nuevamente.
+            </p>
+            )}
+
+{errorMessage && <p className="form-message error">{errorMessage}</p>}
+
+            {errorMessage && <p className="form-message error">{errorMessage}</p>}
 
           <button type="submit" disabled={loading}>
             {loading ? "Validando..." : "Entrar al sistema"}
