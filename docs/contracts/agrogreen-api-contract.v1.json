@@ -1,0 +1,752 @@
+{
+  "project": {
+    "name": "AgroGreen Smart System",
+    "version": "1.0.0",
+    "description": "Contrato JSON base para el sistema inteligente de gestión de invernaderos.",
+    "apiBaseUrl": "http://localhost:8080/api",
+    "frontendBaseUrl": "http://localhost:5173",
+    "dataFormat": "application/json"
+  },
+  "globalRules": {
+    "authentication": {
+      "type": "JWT Bearer Token",
+      "header": "Authorization",
+      "format": "Bearer <token>"
+    },
+    "roles": [
+      "ADMIN",
+      "OPERATOR"
+    ],
+    "accountStatuses": [
+      "ACTIVE",
+      "INACTIVE"
+    ],
+    "dateTimeFormat": "ISO-8601",
+    "idType": "Long",
+    "defaultErrorResponse": {
+      "status": 400,
+      "error": "Bad Request",
+      "message": "Detailed error message"
+    }
+  },
+  "modules": {
+    "status": {
+      "description": "Verificación del estado general del backend.",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/status",
+          "access": "PUBLIC",
+          "responseExample": {
+            "status": "UP",
+            "service": "AgroGreen Smart System API",
+            "version": "1.0.0"
+          }
+        }
+      ]
+    },
+    "auth": {
+      "description": "Autenticación, registro y consulta del usuario actual.",
+      "schemas": {
+        "registerRequest": {
+          "fullName": "Administrador AgroGreen",
+          "email": "admin@agrogreen.com",
+          "password": "admin123",
+          "role": "ADMIN"
+        },
+        "loginRequest": {
+          "email": "admin@agrogreen.com",
+          "password": "admin123"
+        },
+        "authResponse": {
+          "token": "jwt-token-value",
+          "userId": 1,
+          "fullName": "Administrador AgroGreen",
+          "email": "admin@agrogreen.com",
+          "role": "ADMIN"
+        },
+        "currentUserResponse": {
+          "id": 1,
+          "fullName": "Administrador AgroGreen",
+          "email": "admin@agrogreen.com",
+          "role": "ADMIN",
+          "status": "ACTIVE"
+        }
+      },
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/auth/register",
+          "access": "PUBLIC",
+          "requestSchema": "registerRequest",
+          "responseSchema": "authResponse"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "access": "PUBLIC",
+          "requestSchema": "loginRequest",
+          "responseSchema": "authResponse"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "currentUserResponse"
+        }
+      ]
+    },
+    "users": {
+      "description": "Administración de usuarios, roles y estados de cuenta.",
+      "schemas": {
+        "userResponse": {
+          "id": 1,
+          "fullName": "Administrador AgroGreen",
+          "email": "admin@agrogreen.com",
+          "role": "ADMIN",
+          "status": "ACTIVE"
+        },
+        "updateUserRoleRequest": {
+          "role": "OPERATOR"
+        },
+        "updateUserStatusRequest": {
+          "status": "INACTIVE"
+        }
+      },
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/users",
+          "access": [
+            "ADMIN"
+          ],
+          "responseSchema": "userResponse[]"
+        },
+        {
+          "method": "GET",
+          "path": "/users/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "responseSchema": "userResponse"
+        },
+        {
+          "method": "PATCH",
+          "path": "/users/{id}/role",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "updateUserRoleRequest",
+          "responseSchema": "userResponse"
+        },
+        {
+          "method": "PATCH",
+          "path": "/users/{id}/status",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "updateUserStatusRequest",
+          "responseSchema": "userResponse"
+        }
+      ]
+    },
+    "greenhouses": {
+      "description": "Gestión de invernaderos registrados en el sistema.",
+      "schemas": {
+        "greenhouseRequest": {
+          "name": "Invernadero Principal",
+          "location": "Neiva, Huila",
+          "description": "Invernadero destinado al cultivo controlado de tomate.",
+          "status": "ACTIVE"
+        },
+        "greenhouseResponse": {
+          "id": 1,
+          "name": "Invernadero Principal",
+          "location": "Neiva, Huila",
+          "description": "Invernadero destinado al cultivo controlado de tomate.",
+          "status": "ACTIVE",
+          "createdAt": "2026-05-25T10:00:00"
+        }
+      },
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/greenhouses",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "greenhouseResponse[]"
+        },
+        {
+          "method": "GET",
+          "path": "/greenhouses/{id}",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "greenhouseResponse"
+        },
+        {
+          "method": "POST",
+          "path": "/greenhouses",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "greenhouseRequest",
+          "responseSchema": "greenhouseResponse"
+        },
+        {
+          "method": "PUT",
+          "path": "/greenhouses/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "greenhouseRequest",
+          "responseSchema": "greenhouseResponse"
+        },
+        {
+          "method": "DELETE",
+          "path": "/greenhouses/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "responseExample": {
+            "message": "Greenhouse deleted successfully"
+          }
+        }
+      ]
+    },
+    "zones": {
+      "description": "Gestión de zonas internas asociadas a cada invernadero.",
+      "schemas": {
+        "zoneRequest": {
+          "greenhouseId": 1,
+          "name": "Zona Norte",
+          "description": "Zona destinada al cultivo de tomate."
+        },
+        "zoneResponse": {
+          "id": 1,
+          "greenhouseId": 1,
+          "greenhouseName": "Invernadero Principal",
+          "name": "Zona Norte",
+          "description": "Zona destinada al cultivo de tomate."
+        }
+      },
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/zones",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "zoneResponse[]"
+        },
+        {
+          "method": "POST",
+          "path": "/zones",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "zoneRequest",
+          "responseSchema": "zoneResponse"
+        },
+        {
+          "method": "PUT",
+          "path": "/zones/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "zoneRequest",
+          "responseSchema": "zoneResponse"
+        },
+        {
+          "method": "DELETE",
+          "path": "/zones/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "responseExample": {
+            "message": "Zone deleted successfully"
+          }
+        }
+      ]
+    },
+    "crops": {
+      "description": "Gestión de cultivos registrados por zona.",
+      "schemas": {
+        "cropRequest": {
+          "zoneId": 1,
+          "name": "Tomate Cherry",
+          "variety": "Cherry rojo",
+          "plantingDate": "2026-05-25",
+          "status": "ACTIVE"
+        },
+        "cropResponse": {
+          "id": 1,
+          "zoneId": 1,
+          "zoneName": "Zona Norte",
+          "name": "Tomate Cherry",
+          "variety": "Cherry rojo",
+          "plantingDate": "2026-05-25",
+          "status": "ACTIVE"
+        }
+      },
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/crops",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "cropResponse[]"
+        },
+        {
+          "method": "POST",
+          "path": "/crops",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "cropRequest",
+          "responseSchema": "cropResponse"
+        },
+        {
+          "method": "PUT",
+          "path": "/crops/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "cropRequest",
+          "responseSchema": "cropResponse"
+        },
+        {
+          "method": "DELETE",
+          "path": "/crops/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "responseExample": {
+            "message": "Crop deleted successfully"
+          }
+        }
+      ]
+    },
+    "sensors": {
+      "description": "Gestión de sensores físicos o simulados vinculados a zonas del invernadero.",
+      "allowedSensorTypes": [
+        "TEMPERATURE",
+        "HUMIDITY",
+        "LIGHT",
+        "CO2",
+        "PH",
+        "SOIL_MOISTURE"
+      ],
+      "schemas": {
+        "sensorRequest": {
+          "zoneId": 1,
+          "code": "TEMP-001",
+          "name": "Sensor temperatura norte",
+          "type": "TEMPERATURE",
+          "unit": "°C",
+          "minValue": 10.0,
+          "maxValue": 45.0,
+          "status": "ACTIVE"
+        },
+        "sensorResponse": {
+          "id": 1,
+          "zoneId": 1,
+          "zoneName": "Zona Norte",
+          "code": "TEMP-001",
+          "name": "Sensor temperatura norte",
+          "type": "TEMPERATURE",
+          "unit": "°C",
+          "minValue": 10.0,
+          "maxValue": 45.0,
+          "status": "ACTIVE"
+        }
+      },
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/sensors",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "sensorResponse[]"
+        },
+        {
+          "method": "POST",
+          "path": "/sensors",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "sensorRequest",
+          "responseSchema": "sensorResponse"
+        },
+        {
+          "method": "PUT",
+          "path": "/sensors/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "sensorRequest",
+          "responseSchema": "sensorResponse"
+        },
+        {
+          "method": "DELETE",
+          "path": "/sensors/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "responseExample": {
+            "message": "Sensor deleted successfully"
+          }
+        }
+      ]
+    },
+    "sensorReadings": {
+      "description": "Registro y consulta de lecturas de sensores.",
+      "schemas": {
+        "sensorReadingRequest": {
+          "sensorCode": "TEMP-001",
+          "value": 28.5
+        },
+        "sensorReadingResponse": {
+          "id": 1,
+          "sensorId": 1,
+          "sensorCode": "TEMP-001",
+          "sensorName": "Sensor temperatura norte",
+          "zoneName": "Zona Norte",
+          "value": 28.5,
+          "unit": "°C",
+          "status": "NORMAL",
+          "recordedAt": "2026-05-25T10:30:00"
+        }
+      },
+      "possibleReadingStatuses": [
+        "NORMAL",
+        "OUT_OF_RANGE"
+      ],
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/sensor-readings",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "sensorReadingResponse[]"
+        },
+        {
+          "method": "GET",
+          "path": "/sensor-readings/sensor/{sensorCode}",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "sensorReadingResponse[]"
+        },
+        {
+          "method": "POST",
+          "path": "/sensor-readings",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "requestSchema": "sensorReadingRequest",
+          "responseSchema": "sensorReadingResponse"
+        },
+        {
+          "method": "DELETE",
+          "path": "/sensor-readings/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "responseExample": {
+            "message": "Sensor reading deleted successfully"
+          }
+        }
+      ]
+    },
+    "actuators": {
+      "description": "Gestión y ejecución de actuadores del sistema.",
+      "allowedActuatorTypes": [
+        "FAN",
+        "PUMP",
+        "LIGHT",
+        "WINDOW",
+        "HEATER"
+      ],
+      "allowedCommands": [
+        "ON",
+        "OFF",
+        "AUTO"
+      ],
+      "schemas": {
+        "actuatorRequest": {
+          "zoneId": 1,
+          "code": "FAN-001",
+          "name": "Ventilador zona norte",
+          "type": "FAN",
+          "status": "OFF"
+        },
+        "actuatorCommandRequest": {
+          "command": "ON"
+        },
+        "actuatorResponse": {
+          "id": 1,
+          "zoneId": 1,
+          "zoneName": "Zona Norte",
+          "code": "FAN-001",
+          "name": "Ventilador zona norte",
+          "type": "FAN",
+          "status": "ON",
+          "lastCommandAt": "2026-05-25T10:40:00"
+        }
+      },
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/actuators",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "actuatorResponse[]"
+        },
+        {
+          "method": "POST",
+          "path": "/actuators",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "actuatorRequest",
+          "responseSchema": "actuatorResponse"
+        },
+        {
+          "method": "PUT",
+          "path": "/actuators/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "actuatorRequest",
+          "responseSchema": "actuatorResponse"
+        },
+        {
+          "method": "PATCH",
+          "path": "/actuators/code/{code}/command",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "requestSchema": "actuatorCommandRequest",
+          "responseSchema": "actuatorResponse"
+        },
+        {
+          "method": "DELETE",
+          "path": "/actuators/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "responseExample": {
+            "message": "Actuator deleted successfully"
+          }
+        }
+      ]
+    },
+    "automationRules": {
+      "description": "Reglas automáticas que relacionan lecturas de sensores con acciones sobre actuadores.",
+      "allowedOperators": [
+        ">",
+        ">=",
+        "<",
+        "<=",
+        "=="
+      ],
+      "schemas": {
+        "automationRuleRequest": {
+          "name": "Activar ventilador por temperatura alta",
+          "sensorCode": "TEMP-001",
+          "operator": ">",
+          "thresholdValue": 32.0,
+          "actuatorCode": "FAN-001",
+          "command": "ON",
+          "active": true
+        },
+        "automationRuleResponse": {
+          "id": 1,
+          "name": "Activar ventilador por temperatura alta",
+          "sensorCode": "TEMP-001",
+          "sensorName": "Sensor temperatura norte",
+          "operator": ">",
+          "thresholdValue": 32.0,
+          "actuatorCode": "FAN-001",
+          "actuatorName": "Ventilador zona norte",
+          "command": "ON",
+          "active": true
+        },
+        "automationEvaluationResponse": {
+          "ruleId": 1,
+          "ruleName": "Activar ventilador por temperatura alta",
+          "triggered": true,
+          "sensorCode": "TEMP-001",
+          "sensorValue": 35.0,
+          "actuatorCode": "FAN-001",
+          "executedCommand": "ON",
+          "evaluatedAt": "2026-05-25T10:45:00"
+        }
+      },
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/automation-rules",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "automationRuleResponse[]"
+        },
+        {
+          "method": "POST",
+          "path": "/automation-rules",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "automationRuleRequest",
+          "responseSchema": "automationRuleResponse"
+        },
+        {
+          "method": "PUT",
+          "path": "/automation-rules/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "requestSchema": "automationRuleRequest",
+          "responseSchema": "automationRuleResponse"
+        },
+        {
+          "method": "POST",
+          "path": "/automation-rules/evaluate/{sensorCode}",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "automationEvaluationResponse[]"
+        },
+        {
+          "method": "DELETE",
+          "path": "/automation-rules/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "responseExample": {
+            "message": "Automation rule deleted successfully"
+          }
+        }
+      ]
+    },
+    "alerts": {
+      "description": "Alertas generadas por lecturas fuera de rango o eventos críticos del sistema.",
+      "allowedAlertLevels": [
+        "WARNING",
+        "CRITICAL"
+      ],
+      "allowedAlertStatuses": [
+        "OPEN",
+        "RESOLVED"
+      ],
+      "schemas": {
+        "alertResponse": {
+          "id": 1,
+          "sensorCode": "TEMP-001",
+          "sensorName": "Sensor temperatura norte",
+          "zoneName": "Zona Norte",
+          "type": "OUT_OF_RANGE",
+          "level": "WARNING",
+          "message": "La lectura del sensor TEMP-001 está fuera del rango permitido.",
+          "status": "OPEN",
+          "createdAt": "2026-05-25T11:00:00",
+          "resolvedAt": null
+        }
+      },
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/alerts",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "alertResponse[]"
+        },
+        {
+          "method": "GET",
+          "path": "/alerts?status=OPEN&sensorCode=TEMP-001",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "alertResponse[]"
+        },
+        {
+          "method": "PATCH",
+          "path": "/alerts/{id}/resolve",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "alertResponse"
+        },
+        {
+          "method": "DELETE",
+          "path": "/alerts/{id}",
+          "access": [
+            "ADMIN"
+          ],
+          "responseExample": {
+            "message": "Alert deleted successfully"
+          }
+        }
+      ]
+    },
+    "dashboard": {
+      "description": "Resumen general de indicadores del sistema.",
+      "schemas": {
+        "dashboardSummaryResponse": {
+          "totalGreenhouses": 2,
+          "totalZones": 4,
+          "totalCrops": 3,
+          "totalSensors": 8,
+          "totalActuators": 5,
+          "openAlerts": 1,
+          "latestReadings": [
+            {
+              "sensorCode": "TEMP-001",
+              "sensorName": "Sensor temperatura norte",
+              "value": 28.5,
+              "unit": "°C",
+              "recordedAt": "2026-05-25T10:30:00"
+            }
+          ]
+        }
+      },
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/dashboard/summary",
+          "access": [
+            "ADMIN",
+            "OPERATOR"
+          ],
+          "responseSchema": "dashboardSummaryResponse"
+        }
+      ]
+    }
+  }
+}
