@@ -14,6 +14,7 @@ import {
   UserCircle,
   Warehouse,
   Workflow,
+  Users,
 } from "lucide-react";
 
 import { NavLink, useNavigate } from "react-router-dom";
@@ -155,6 +156,16 @@ export default function AppLayout({ children }) {
           >
             <AlertTriangle size={18} />
             {t("menu.alerts")}
+          </NavLink>
+
+          <NavLink
+            to="/users"
+            className={({ isActive }) =>
+              isActive ? "nav-item active" : "nav-item"
+            }
+          >
+            <Users size={18} />
+            Usuarios
           </NavLink>
 
           <NavLink

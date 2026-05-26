@@ -18,6 +18,7 @@ import AlertsPage from "./pages/AlertsPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
+import UsersPage from "./pages/UsersPage";
 
 function ProtectedApp({ children }) {
   return (
@@ -134,6 +135,18 @@ export default function App() {
               </ProtectedApp>
             }
           />
+
+          <Route
+            path="/users"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <UsersPage />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/profile"
             element={

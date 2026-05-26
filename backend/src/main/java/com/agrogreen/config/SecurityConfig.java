@@ -65,9 +65,11 @@ public class SecurityConfig {
                         // Preflight CORS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
+                        // Public authentication endpoints
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
 
+                        // Public system endpoints
                         .requestMatchers(
                                 "/api/status",
                                 "/api/status/**",
@@ -76,10 +78,15 @@ public class SecurityConfig {
                                 "/v3/api-docs/**"
                         ).permitAll()
 
+                        // Authenticated profile
                         .requestMatchers(HttpMethod.GET, "/api/auth/me")
                         .hasAnyRole("ADMIN", "OPERATOR")
 
-                        // Dashboard, monitoring and charts data
+                        // User account administration
+                        .requestMatchers("/api/users/**")
+                        .hasRole("ADMIN")
+
+                        // Dashboard
                         .requestMatchers(HttpMethod.GET, "/api/dashboard/**")
                         .hasAnyRole("ADMIN", "OPERATOR")
 
@@ -120,8 +127,13 @@ public class SecurityConfig {
                         // Actuators
                         .requestMatchers(HttpMethod.GET, "/api/actuators/**")
                         .hasAnyRole("ADMIN", "OPERATOR")
-                        .requestMatchers(HttpMethod.PATCH, "/api/actuators/code/**/command")
+
+                        // IMPORTANTE:
+                        // Antes estaba /api/actuators/code/**/command.
+                        // Ese patrón genera error porque ** no puede ir en la mitad.
+                        .requestMatchers(HttpMethod.PATCH, "/api/actuators/code/*/command")
                         .hasAnyRole("ADMIN", "OPERATOR")
+
                         .requestMatchers("/api/actuators/**")
                         .hasRole("ADMIN")
 
@@ -136,8 +148,13 @@ public class SecurityConfig {
                         // Alerts
                         .requestMatchers(HttpMethod.GET, "/api/alerts/**")
                         .hasAnyRole("ADMIN", "OPERATOR")
-                        .requestMatchers(HttpMethod.PATCH, "/api/alerts/**/resolve")
+
+                        // IMPORTANTE:
+                        // Antes estaba /api/alerts/**/resolve.
+                        // Ese patrón también genera error porque ** está en la mitad.
+                        .requestMatchers(HttpMethod.PATCH, "/api/alerts/*/resolve")
                         .hasAnyRole("ADMIN", "OPERATOR")
+
                         .requestMatchers(HttpMethod.DELETE, "/api/alerts/**")
                         .hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/alerts/**")

@@ -1348,3 +1348,18 @@ th,
     justify-content: flex-start;
   }
 }
+
+.user-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.user-actions select {
+  min-width: 135px;
+}
+
+.user-actions select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
