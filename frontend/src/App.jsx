@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import { LanguageProvider } from "./context/LanguageContext";
 
 import AppLayout from "./components/layout/AppLayout";
 import DashboardPage from "./pages/DashboardPage";
@@ -16,6 +17,7 @@ import AutomationRulesPage from "./pages/AutomationRulesPage";
 import AlertsPage from "./pages/AlertsPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function ProtectedApp({ children }) {
   return (
@@ -28,6 +30,7 @@ function ProtectedApp({ children }) {
 export default function App() {
   return (
     <BrowserRouter>
+    <LanguageProvider>
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
@@ -131,8 +134,17 @@ export default function App() {
               </ProtectedApp>
             }
           />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedApp>
+                <ProfilePage />
+              </ProtectedApp>
+            }
+          />
         </Routes>
       </AuthProvider>
+      </LanguageProvider>
     </BrowserRouter>
   );
 }

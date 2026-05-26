@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { AdminOnly, PermissionNotice } from "../components/auth/RoleGuard";
 import {
   createZone,
   deleteZone,
@@ -7,6 +6,7 @@ import {
   getZones,
   updateZone,
 } from "../services/api";
+import { AdminOnly, PermissionNotice } from "../components/auth/RoleGuard";
 
 const initialForm = {
   greenhouseId: "",
@@ -36,8 +36,8 @@ export default function ZonesPage() {
         getGreenhouses(),
       ]);
 
-      setZones(zonesData);
-      setGreenhouses(greenhousesData);
+      setZones(Array.isArray(zonesData) ? zonesData : []);
+      setGreenhouses(Array.isArray(greenhousesData) ? greenhousesData : []);
     } catch (error) {
       console.error(error);
       setErrorMessage("No se pudieron cargar las zonas.");
@@ -59,18 +59,17 @@ export default function ZonesPage() {
     }));
   };
 
+  const resetForm = () => {
+    setForm(initialForm);
+    setEditingId(null);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!form.greenhouseId || !form.name.trim()) {
-      setErrorMessage("Debes seleccionar un invernadero y escribir el nombre de la zona.");
-      return;
-    }
-
     const payload = {
+      ...form,
       greenhouseId: Number(form.greenhouseId),
-      name: form.name,
-      description: form.description,
     };
 
     try {
@@ -86,8 +85,7 @@ export default function ZonesPage() {
         setSuccessMessage("Zona creada correctamente.");
       }
 
-      setForm(initialForm);
-      setEditingId(null);
+      resetForm();
       await loadData();
     } catch (error) {
       console.error(error);
@@ -101,24 +99,14 @@ export default function ZonesPage() {
     setEditingId(zone.id);
 
     setForm({
-      greenhouseId: zone.greenhouseId ? String(zone.greenhouseId) : "",
+      greenhouseId: zone.greenhouseId || "",
       name: zone.name || "",
       description: zone.description || "",
     });
-
-    setErrorMessage("");
-    setSuccessMessage("");
-  };
-
-  const handleCancelEdit = () => {
-    setEditingId(null);
-    setForm(initialForm);
-    setErrorMessage("");
-    setSuccessMessage("");
   };
 
   const handleDelete = async (id) => {
-    const confirmed = window.confirm("¿Seguro que deseas eliminar esta zona?");
+    const confirmed = window.confirm("¿Deseas eliminar esta zona?");
 
     if (!confirmed) return;
 
@@ -131,161 +119,136 @@ export default function ZonesPage() {
       await loadData();
     } catch (error) {
       console.error(error);
-      setErrorMessage(
-        "No se pudo eliminar. Puede tener cultivos, sensores o lecturas asociadas."
-      );
+      setErrorMessage("No se pudo eliminar la zona.");
     }
   };
 
   return (
-    <div className="module-page">
-      <header className="page-header">
+    <section className="page-section">
+      <div className="page-header">
         <div>
-          <p className="eyebrow">Gestión operativa</p>
+          <p className="eyebrow">Distribución del invernadero</p>
           <h1>Zonas</h1>
-          <p>
-            Administra las áreas internas de cada invernadero para organizar sensores,
-            cultivos y actuadores.
-          </p>
+          <p>Administra las zonas internas asociadas a cada invernadero.</p>
         </div>
+      </div>
 
-        <button onClick={loadData}>Actualizar</button>
-      </header>
+      {errorMessage && <p className="form-message error">{errorMessage}</p>}
 
-      <section className="module-grid">
+      {successMessage && (
+        <p className="form-message success">{successMessage}</p>
+      )}
+
+      <div className="content-grid zones-layout">
         <AdminOnly
           fallback={
             <PermissionNotice
               title="Solo consulta"
-              message="Tu rol permite consultar esta información, pero solo un administrador puede crear o modificar registros."
+              message="Tu rol permite consultar zonas, pero solo un administrador puede crear o modificar registros."
             />
           }
         >
-        <article className="panel form-panel">
-          <div className="panel-header">
-            <h2>{editingId ? "Editar zona" : "Nueva zona"}</h2>
-            <p>
-              Asocia cada zona a un invernadero existente.
-            </p>
-          </div>
+          <article className="panel form-panel">
+            <h2>{editingId ? "Editar zona" : "Crear zona"}</h2>
 
-          <form className="entity-form" onSubmit={handleSubmit}>
-            <label>
-              Invernadero
-              <select
-                name="greenhouseId"
-                value={form.greenhouseId}
-                onChange={handleChange}
-              >
-                <option value="">Selecciona un invernadero</option>
+            <form className="auth-form" onSubmit={handleSubmit}>
+              <label>
+                Invernadero
+                <select
+                  name="greenhouseId"
+                  value={form.greenhouseId}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Selecciona un invernadero</option>
 
-                {greenhouses.map((greenhouse) => (
-                  <option key={greenhouse.id} value={greenhouse.id}>
-                    {greenhouse.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+                  {greenhouses.map((greenhouse) => (
+                    <option key={greenhouse.id} value={greenhouse.id}>
+                      {greenhouse.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-            <label>
-              Nombre de la zona
-              <input
-                type="text"
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="Ej: Zona Norte"
-              />
-            </label>
+              <label>
+                Nombre
+                <input
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Zona Norte"
+                  required
+                />
+              </label>
 
-            <label>
-              Descripción
-              <textarea
-                name="description"
-                value={form.description}
-                onChange={handleChange}
-                placeholder="Ej: Zona destinada al cultivo de tomate."
-                rows="5"
-              />
-            </label>
+              <label>
+                Descripción
+                <textarea
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  placeholder="Zona destinada al cultivo de tomate."
+                  rows="4"
+                />
+              </label>
 
-            {errorMessage && <p className="form-message error">{errorMessage}</p>}
-            {successMessage && (
-              <p className="form-message success">{successMessage}</p>
-            )}
-
-            <div className="form-actions">
               <button type="submit" disabled={saving}>
                 {saving
                   ? "Guardando..."
                   : editingId
                   ? "Actualizar zona"
-                  : "Crear zona"}
+                  : "Guardar zona"}
               </button>
 
               {editingId && (
                 <button
                   type="button"
-                  className="secondary-button"
-                  onClick={handleCancelEdit}
+                  className="small-button"
+                  onClick={resetForm}
                 >
                   Cancelar
                 </button>
               )}
-            </div>
-          </form>
-        </article>
+            </form>
+          </article>
         </AdminOnly>
 
-        <section className="panel">
-          <div className="panel-header">
-            <h2>Listado de zonas</h2>
-            <p>Consulta, edita o elimina las zonas registradas.</p>
-          </div>
+        <article className="panel table-panel">
+          <h2>Listado de zonas</h2>
 
-          <div className="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>Zona</th>
-                  <th>Invernadero</th>
-                  <th>Estado</th>
-                  <th>Fecha</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
+          {loading && <p className="loading-text">Cargando zonas...</p>}
 
-              <tbody>
-                {loading ? (
+          {!loading && zones.length === 0 && (
+            <p className="loading-text">No hay zonas registradas.</p>
+          )}
+
+          {!loading && zones.length > 0 && (
+            <div className="table-wrapper">
+              <table>
+                <thead>
                   <tr>
-                    <td colSpan="5" className="empty-cell">
-                      Cargando zonas...
-                    </td>
+                    <th>Nombre</th>
+                    <th>Invernadero</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
                   </tr>
-                ) : zones.length === 0 ? (
-                  <tr>
-                    <td colSpan="5" className="empty-cell">
-                      No hay zonas registradas.
-                    </td>
-                  </tr>
-                ) : (
-                  zones.map((zone) => (
+                </thead>
+
+                <tbody>
+                  {zones.map((zone) => (
                     <tr key={zone.id}>
+                      <td>{zone.name}</td>
+                      <td>{zone.greenhouseName}</td>
+                      <td>{zone.description}</td>
                       <td>
-                        <strong>{zone.name}</strong>
-                        <span>{zone.description || "Sin descripción"}</span>
-                      </td>
-
-                      <td>{zone.greenhouseName || "Sin invernadero"}</td>
-
-                      <td>
-                        <span className="badge success">{zone.status}</span>
-                      </td>
-
-                      <td>{formatDate(zone.createdAt)}</td>
-
-                      <td>
-                        <AdminOnly fallback={<span className="read-only-label">Solo lectura</span>}>
+                        <AdminOnly
+                          fallback={
+                            <span className="read-only-label">
+                              Solo lectura
+                            </span>
+                          }
+                        >
                           <div className="table-actions">
                             <button
                               type="button"
@@ -306,18 +269,13 @@ export default function ZonesPage() {
                         </AdminOnly>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </section>
-    </div>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </article>
+      </div>
+    </section>
   );
-}
-
-function formatDate(value) {
-  if (!value) return "Sin fecha";
-  return new Date(value).toLocaleDateString();
 }

@@ -65,15 +65,19 @@ public class SecurityConfig {
                         // Preflight CORS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // Public endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
+
                         .requestMatchers(
-                                "/api/auth/**",
                                 "/api/status",
                                 "/api/status/**",
                                 "/actuator/health",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/auth/me")
+                        .hasAnyRole("ADMIN", "OPERATOR")
 
                         // Dashboard, monitoring and charts data
                         .requestMatchers(HttpMethod.GET, "/api/dashboard/**")

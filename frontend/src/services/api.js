@@ -80,6 +80,11 @@ export const getDashboardSummary = async () => {
   return response.data;
 };
 
+export const getCurrentUser = async () => {
+  const response = await api.get("/auth/me");
+  return response.data;
+};
+
 // Greenhouses
 export const getGreenhouses = async () => {
   const response = await api.get("/greenhouses");

@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   BarChart3,
   Fan,
+  Languages,
   Layers,
   Leaf,
   LayoutDashboard,
@@ -17,9 +18,12 @@ import {
 
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function AppLayout({ children }) {
   const { user, logout } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -36,8 +40,8 @@ export default function AppLayout({ children }) {
           </div>
 
           <div>
-            <h1>AgroGreen</h1>
-            <p>Sistema inteligente</p>
+            <h1>{t("appName")}</h1>
+            <p>{t("appSubtitle")}</p>
           </div>
         </div>
 
@@ -50,7 +54,7 @@ export default function AppLayout({ children }) {
             }
           >
             <LayoutDashboard size={18} />
-            Panel
+            {t("menu.dashboard")}
           </NavLink>
 
           <NavLink
@@ -60,7 +64,7 @@ export default function AppLayout({ children }) {
             }
           >
             <Monitor size={18} />
-            Monitoreo
+            {t("menu.monitoring")}
           </NavLink>
 
           <NavLink
@@ -70,7 +74,7 @@ export default function AppLayout({ children }) {
             }
           >
             <BarChart3 size={18} />
-            Gráficas
+            {t("menu.charts")}
           </NavLink>
 
           <NavLink
@@ -80,7 +84,7 @@ export default function AppLayout({ children }) {
             }
           >
             <Warehouse size={18} />
-            Invernaderos
+            {t("menu.greenhouses")}
           </NavLink>
 
           <NavLink
@@ -90,7 +94,7 @@ export default function AppLayout({ children }) {
             }
           >
             <Layers size={18} />
-            Zonas
+            {t("menu.zones")}
           </NavLink>
 
           <NavLink
@@ -100,7 +104,7 @@ export default function AppLayout({ children }) {
             }
           >
             <Sprout size={18} />
-            Cultivos
+            {t("menu.crops")}
           </NavLink>
 
           <NavLink
@@ -110,7 +114,7 @@ export default function AppLayout({ children }) {
             }
           >
             <Thermometer size={18} />
-            Sensores
+            {t("menu.sensors")}
           </NavLink>
 
           <NavLink
@@ -120,7 +124,7 @@ export default function AppLayout({ children }) {
             }
           >
             <Fan size={18} />
-            Actuadores
+            {t("menu.actuators")}
           </NavLink>
 
           <NavLink
@@ -130,7 +134,7 @@ export default function AppLayout({ children }) {
             }
           >
             <Activity size={18} />
-            Lecturas
+            {t("menu.readings")}
           </NavLink>
 
           <NavLink
@@ -140,7 +144,7 @@ export default function AppLayout({ children }) {
             }
           >
             <Workflow size={18} />
-            Reglas
+            {t("menu.rules")}
           </NavLink>
 
           <NavLink
@@ -150,9 +154,34 @@ export default function AppLayout({ children }) {
             }
           >
             <AlertTriangle size={18} />
-            Alertas
+            {t("menu.alerts")}
+          </NavLink>
+
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              isActive ? "nav-item active" : "nav-item"
+            }
+          >
+            <UserCircle size={18} />
+            {t("menu.profile")}
           </NavLink>
         </nav>
+
+        <div className="language-switcher">
+          <div>
+            <Languages size={16} />
+            <span>{t("common.language")}</span>
+          </div>
+
+          <select
+            value={language}
+            onChange={(event) => setLanguage(event.target.value)}
+          >
+            <option value="es">{t("common.spanish")}</option>
+            <option value="en">{t("common.english")}</option>
+          </select>
+        </div>
 
         <div className="sidebar-user">
           <div className="sidebar-user-info">
@@ -166,7 +195,7 @@ export default function AppLayout({ children }) {
 
           <button type="button" onClick={handleLogout}>
             <LogOut size={16} />
-            Salir
+            {t("menu.logout")}
           </button>
         </div>
       </aside>

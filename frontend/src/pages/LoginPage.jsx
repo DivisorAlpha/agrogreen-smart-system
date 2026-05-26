@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Leaf, Lock, Mail } from "lucide-react";
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
 
 const initialForm = {
   email: "admin@agrogreen.com",
@@ -14,8 +15,11 @@ export default function LoginPage() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const { login, isAuthenticated } = useAuth();
+  const { t } = useLanguage();
+
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
   const sessionExpired = searchParams.get("session") === "expired";
 
   if (isAuthenticated) {
@@ -35,7 +39,7 @@ export default function LoginPage() {
     event.preventDefault();
 
     if (!form.email.trim() || !form.password.trim()) {
-      setErrorMessage("Debes escribir correo y contraseña.");
+      setErrorMessage(t("auth.requiredFields"));
       return;
     }
 
@@ -51,7 +55,7 @@ export default function LoginPage() {
       navigate("/", { replace: true });
     } catch (error) {
       console.error(error);
-      setErrorMessage("Credenciales incorrectas o usuario no registrado.");
+      setErrorMessage(t("auth.invalidCredentials"));
     } finally {
       setLoading(false);
     }
@@ -66,23 +70,20 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <h1>AgroGreen</h1>
-            <p>Smart System</p>
+            <h1>{t("appName")}</h1>
+            <p>{t("appSubtitle")}</p>
           </div>
         </div>
 
         <div className="auth-header">
-          <p className="eyebrow">Acceso seguro</p>
-          <h2>Iniciar sesión</h2>
-          <p>
-            Ingresa con tu usuario administrador para acceder al sistema
-            inteligente de invernadero.
-          </p>
+          <p className="eyebrow">{t("auth.secureAccess")}</p>
+          <h2>{t("auth.loginTitle")}</h2>
+          <p>{t("auth.loginDescription")}</p>
         </div>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <label>
-            Correo electrónico
+            {t("auth.email")}
             <div className="auth-input">
               <Mail size={18} />
               <input
@@ -96,7 +97,7 @@ export default function LoginPage() {
           </label>
 
           <label>
-            Contraseña
+            {t("auth.password")}
             <div className="auth-input">
               <Lock size={18} />
               <input
@@ -110,22 +111,21 @@ export default function LoginPage() {
           </label>
 
           {sessionExpired && !errorMessage && (
-            <p className="form-message error">
-                Tu sesión expiró o el token no es válido. Inicia sesión nuevamente.
-            </p>
-            )}
+            <p className="form-message error">{t("auth.sessionExpired")}</p>
+          )}
 
-{errorMessage && <p className="form-message error">{errorMessage}</p>}
-
-            {errorMessage && <p className="form-message error">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="form-message error">{errorMessage}</p>
+          )}
 
           <button type="submit" disabled={loading}>
-            {loading ? "Validando..." : "Entrar al sistema"}
+            {loading ? t("auth.validating") : t("auth.loginButton")}
           </button>
         </form>
 
         <p className="auth-footer">
-          ¿No tienes usuario? <Link to="/register">Crear administrador</Link>
+          {t("auth.noAccount")}{" "}
+          <Link to="/register">{t("auth.createAdmin")}</Link>
         </p>
       </section>
     </main>

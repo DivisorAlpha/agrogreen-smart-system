@@ -6,6 +6,8 @@ import com.agrogreen.auth.dto.RegisterRequest;
 import com.agrogreen.auth.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import com.agrogreen.auth.dto.AuthUserProfileResponse;
+import org.springframework.security.core.Authentication;
 
 /**
  * Project: AgroGreen Smart System
@@ -30,5 +32,10 @@ public class AuthController {
     @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
+    }
+
+    @GetMapping("/me")
+    public AuthUserProfileResponse getCurrentUser(Authentication authentication) {
+        return authService.getCurrentUserProfile(authentication.getName());
     }
 }

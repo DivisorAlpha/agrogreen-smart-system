@@ -10,6 +10,8 @@ import com.agrogreen.shared.exception.ResourceNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.agrogreen.auth.dto.AuthUserProfileResponse;
+import com.agrogreen.shared.exception.ResourceNotFoundException;
 
 /**
  * Project: AgroGreen Smart System
@@ -80,4 +82,18 @@ public class AuthService {
                 user.getRole()
         );
     }
+    public AuthUserProfileResponse getCurrentUserProfile(String email) {
+    UserAccount user = userAccountRepository.findByEmail(email)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                    "User account not found with email: " + email
+            ));
+
+    return new AuthUserProfileResponse(
+            user.getId(),
+            user.getFullName(),
+            user.getEmail(),
+            user.getRole(),
+            user.getStatus()
+    );
+}
 }
