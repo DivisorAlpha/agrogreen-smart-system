@@ -82,3 +82,7 @@ logs/
 
 api-tests/.venv/
 api-tests/.env
+
+# Selenium / E2E tests
+e2e-tests/.venv/
+e2e-tests/.env
