@@ -7,6 +7,11 @@ import com.agrogreen.auth.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import com.agrogreen.auth.dto.AuthUserProfileResponse;
+import com.agrogreen.auth.dto.GoogleLoginRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.security.core.Authentication;
 
 /**
@@ -37,5 +42,12 @@ public class AuthController {
     @GetMapping("/me")
     public AuthUserProfileResponse getCurrentUser(Authentication authentication) {
         return authService.getCurrentUserProfile(authentication.getName());
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<AuthResponse> googleLogin(
+            @RequestBody GoogleLoginRequest request
+    ) {
+        return ResponseEntity.ok(authService.googleLogin(request.getCredential()));
     }
 }

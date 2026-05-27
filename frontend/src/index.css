@@ -1363,3 +1363,75 @@ th,
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* Fix Chrome autofill white background in dark login/register inputs */
+.auth-input input {
+  background: transparent !important;
+  color: #ecfff5;
+}
+
+.auth-input input:-webkit-autofill,
+.auth-input input:-webkit-autofill:hover,
+.auth-input input:-webkit-autofill:focus,
+.auth-input input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px rgba(1, 22, 9, 0.96) inset !important;
+  -webkit-text-fill-color: #ecfff5 !important;
+  caret-color: #ecfff5 !important;
+  border-radius: 14px;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.auth-input:has(input:-webkit-autofill) {
+  background: rgba(1, 22, 9, 0.96);
+  border-color: rgba(64, 220, 110, 0.45);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+  color: rgba(220, 255, 230, 0.65);
+  font-size: 0.85rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.google-login-box {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.google-login-box > div {
+  width: 100% !important;
+}
+
+.google-login-box iframe {
+  width: 100% !important;
+}
+
+/* Center Google login button */
+.google-login-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0 0.75rem;
+}
+
+.google-login-box > div {
+  display: flex !important;
+  justify-content: center !important;
+  margin: 0 auto !important;
+}
+
+.google-login-box iframe {
+  margin: 0 auto !important;
+}

@@ -7,7 +7,6 @@ const initialForm = {
   fullName: "",
   email: "",
   password: "",
-  role: "ADMIN",
 };
 
 export default function RegisterPage() {
@@ -34,12 +33,16 @@ export default function RegisterPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!form.fullName.trim() || !form.email.trim() || !form.password.trim()) {
+    const fullName = form.fullName.trim();
+    const email = form.email.trim();
+    const password = form.password.trim();
+
+    if (!fullName || !email || !password) {
       setErrorMessage("Nombre, correo y contraseña son obligatorios.");
       return;
     }
 
-    if (form.password.length < 6) {
+    if (password.length < 6) {
       setErrorMessage("La contraseña debe tener mínimo 6 caracteres.");
       return;
     }
@@ -49,10 +52,10 @@ export default function RegisterPage() {
       setErrorMessage("");
 
       await register({
-        fullName: form.fullName.trim(),
-        email: form.email.trim(),
-        password: form.password,
-        role: form.role,
+        fullName,
+        email,
+        password,
+        role: "OPERATOR",
       });
 
       navigate("/", { replace: true });
@@ -76,16 +79,16 @@ export default function RegisterPage() {
 
           <div>
             <h1>AgroGreen</h1>
-            <p>Smart System</p>
+            <p>Sistema inteligente</p>
           </div>
         </div>
 
         <div className="auth-header">
-          <p className="eyebrow">Registro inicial</p>
-          <h2>Crear administrador</h2>
+          <p className="eyebrow">REGISTRO DE USUARIO</p>
+          <h2>Crear usuario</h2>
           <p>
-            Crea una cuenta administrativa para gestionar el sistema inteligente
-            de invernadero.
+            Crea una cuenta de operador para acceder al sistema inteligente de
+            invernadero.
           </p>
         </div>
 
@@ -99,7 +102,9 @@ export default function RegisterPage() {
                 name="fullName"
                 value={form.fullName}
                 onChange={handleChange}
-                placeholder="Administrador AgroGreen"
+                placeholder="Nombre completo"
+                autoComplete="name"
+                required
               />
             </div>
           </label>
@@ -113,7 +118,9 @@ export default function RegisterPage() {
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                placeholder="admin@agrogreen.com"
+                placeholder="usuario@agrogreen.com"
+                autoComplete="email"
+                required
               />
             </div>
           </label>
@@ -128,22 +135,22 @@ export default function RegisterPage() {
                 value={form.password}
                 onChange={handleChange}
                 placeholder="Mínimo 6 caracteres"
+                autoComplete="new-password"
+                required
               />
             </div>
           </label>
 
-          <label>
-            Rol
-            <select name="role" value={form.role} onChange={handleChange}>
-              <option value="ADMIN">ADMIN</option>
-              <option value="OPERATOR">OPERATOR</option>
-            </select>
-          </label>
+          <p className="form-helper">
+            La cuenta será creada con permisos de operador.
+          </p>
 
-          {errorMessage && <p className="form-message error">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="form-message error">{errorMessage}</p>
+          )}
 
           <button type="submit" disabled={loading}>
-            {loading ? "Creando..." : "Crear cuenta"}
+            {loading ? "Creando usuario..." : "Crear cuenta"}
           </button>
         </form>
 

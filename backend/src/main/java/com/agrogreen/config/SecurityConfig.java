@@ -68,6 +68,7 @@ public class SecurityConfig {
                         // Public authentication endpoints
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/google").permitAll()
 
                         // Public system endpoints
                         .requestMatchers(

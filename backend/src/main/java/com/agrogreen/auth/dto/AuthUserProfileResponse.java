@@ -3,7 +3,7 @@ package com.agrogreen.auth.dto;
 /**
  * Project: AgroGreen Smart System
  * Module: Authentication
- * Description: Response DTO used to expose authenticated user profile data.
+ * Description: DTO used to return the authenticated user profile.
  */
 public class AuthUserProfileResponse {
 
@@ -48,5 +48,25 @@ public class AuthUserProfileResponse {
 
     public String getStatus() {
         return status;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

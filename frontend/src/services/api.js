@@ -284,4 +284,12 @@ export const updateUserStatus = async (id, status) => {
   return response.data;
 };
 
+export const loginWithGoogle = async (credential) => {
+  const response = await api.post("/auth/google", {
+    credential,
+  });
+
+  return response.data;
+};
+
 export default api;
